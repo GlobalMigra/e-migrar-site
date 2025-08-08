@@ -92,7 +92,7 @@ export default function Home({ countries }) {
 // ====> Carga los datos desde /data.json
 export async function getStaticProps() {
   try {
-    const res = await fetch('/data.json');
+   const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'https://e-migrar-site.pages.dev'}/data.json`);
     const countries = await res.json();
 
     return {
