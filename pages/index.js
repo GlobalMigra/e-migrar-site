@@ -1,7 +1,7 @@
 // pages/index.js
 import { useState, useEffect } from 'react';
 
-export default function Home({ countries, t }) {
+export default function Home({ countries, }) {
   const [lang, setLang] = useState('es');
   const [translations, setTranslations] = useState(null);
   const [t, setT] = useState({
