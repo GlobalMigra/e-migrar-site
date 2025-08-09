@@ -13,9 +13,13 @@ export default function Home({ countries }) {
   return (
     <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif', maxWidth: '1000px', margin: '0 auto', backgroundColor: '#f5f5f5', minHeight: '100vh' }}>
       <header style={{ textAlign: 'center', marginBottom: '30px', backgroundColor: '#0D47A1', color: 'white', padding: '20px', borderRadius: '8px' }}>
-        <h1 style={{ fontSize: '2.5em', margin: 0 }}>🌍 e-migrar</h1>
-        <p style={{ margin: '10px 0 0 0', fontWeight: 'normal' }}>Tu guía digital para emigrar con confianza</p>
-      </header>
+  <img 
+    src="/images/logo-e-migrar.png" 
+    alt="e-migrar" 
+    style={{ width: '200px', height: 'auto', marginBottom: '10px' }} 
+  />
+  <p><strong>Tu guía digital para emigrar con confianza</strong></p>
+</header>
 
       <div style={{ marginBottom: '20px', display: 'flex', gap: '10px', flexWrap: 'wrap', justifyContent: 'center' }}>
         <input
