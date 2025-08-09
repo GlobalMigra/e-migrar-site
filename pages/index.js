@@ -18,7 +18,7 @@ export default function Home({ countries, t }) {
     alt="e-migrar" 
     style={{ width: '200px', height: 'auto', marginBottom: '10px' }} 
   />
-  <p><strong>Tu guía digital para emigrar con confianza</strong></p>
+  <p><strong>{t.tagline}</strong></p>
 </header>
 
       <div style={{ marginBottom: '20px', display: 'flex', gap: '10px', flexWrap: 'wrap', justifyContent: 'center' }}>
