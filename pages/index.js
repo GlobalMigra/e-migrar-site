@@ -96,20 +96,49 @@ export default function Home({ countries }) {
 // ====> Carga los datos desde /data.json
 export async function getStaticProps() {
   try {
-   const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'https://e-migrar-site.pages.dev'}/data.json`);
+    // ====> 1. Carga los datos de migración
+    const res = await fetch('/data.json');
     const countries = await res.json();
+
+    // ====> 2. Carga las traducciones
+    const resTranslations = await fetch('/locales/translations.json');
+    const translations = await resTranslations.json();
+
+    // ====> 3. Define el idioma predeterminado (español)
+    const t = translations['es']; // Puedes cambiar a 'en', 'fr', etc.
 
     return {
       props: {
         countries,
+        translations, // Opcional: si quieres cambiar de idioma en el cliente
+        t,            // Etiqueta corta para usar en el componente
       },
-      revalidate: 3600, // Actualiza cada hora
+      revalidate: 3600,
     };
   } catch (error) {
-    console.error('Error al cargar datos:', error);
+    console.error('Error al cargar datos o traducciones:', error);
     return {
       props: {
         countries: [],
+        t: {
+          title: "e-migrar",
+          tagline: "Tu guía digital para emigrar con confianza",
+          search_placeholder: "Buscar país...",
+          filter_label: "Todos los trámites",
+          route_work: "Trabajo",
+          route_study: "Estudio",
+          route_tourism: "Turismo",
+          route_marriage: "Matrimonio",
+          route_asylum: "Asilo",
+          processing_time: "Tiempo estimado",
+          cost: "Costo aproximado",
+          allows_residence: "¿Permite residencia?",
+          allows_family: "¿Puede traer familiares?",
+          requirements: "Requisitos",
+          official_link: "Ver sitio oficial",
+          alert_special: "Alerta",
+          footer: "© 2025 e-migrar.org. Información educativa. No constituye asesoría legal."
+        }
       },
     };
   }
