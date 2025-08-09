@@ -1,7 +1,7 @@
 // pages/index.js
 import { useState, useEffect } from 'react';
 
-export default function Home({ countries }) {
+export default function Home({ countries, t }) {
   const [filter, setFilter] = useState('');
   const [type, setType] = useState('');
 
