@@ -1,7 +1,40 @@
 // pages/index.js
 import { useState, useEffect } from 'react';
 
-export default function Home({ countries, t }) {
+export default function Home({ countries }) {
+  const [lang, setLang] = useState('es');
+  const [translations, setTranslations] = useState(null);
+  const [t, setT] = useState({
+    title: "e-migrar",
+    tagline: "Tu guía digital para emigrar con confianza",
+    search_placeholder: "Buscar país...",
+    filter_label: "Todos los trámites",
+    route_work: "Trabajo",
+    route_study: "Estudio",
+    route_tourism: "Turismo",
+    route_marriage: "Matrimonio",
+    route_asylum: "Asilo",
+    processing_time: "Tiempo estimado",
+    cost: "Costo aproximado",
+    allows_residence: "¿Permite residencia?",
+    allows_family: "¿Puede traer familiares?",
+    requirements: "Requisitos",
+    official_link: "Ver sitio oficial",
+    alert_special: "Alerta",
+    footer: "© 2025 e-migrar.org. Información educativa. No constituye asesoría legal."
+  });
+
+  useEffect(() => {
+    const savedLang = localStorage.getItem('lang') || 'es';
+    setLang(savedLang);
+
+    fetch('/locales/translations.json')
+      .then(res => res.json())
+      .then(data => {
+        setTranslations(data);
+        setT(data[savedLang]);
+      });
+  }, []);
   const [filter, setFilter] = useState('');
   const [type, setType] = useState('');
 
@@ -18,7 +51,23 @@ export default function Home({ countries, t }) {
     alt="e-migrar" 
     style={{ width: '200px', height: 'auto', marginBottom: '10px' }} 
   />
-  <p><strong>{t.tagline}</strong></p>
+  <p><strong>{t.tagline}</strong></p> <div style={{ marginTop: '10px' }}>
+  <select 
+    onChange={(e) => {
+      const lang = e.target.value;
+      localStorage.setItem('lang', lang);
+      window.location.reload();
+    }}
+    defaultValue={localStorage.getItem('lang') || 'es'}
+    style={{ padding: '6px', borderRadius: '4px', border: '1px solid #ccc', fontSize: '14px' }}
+  >
+    <option value="es">🇪🇸 Español</option>
+    <option value="en">🇬🇧 English</option>
+    <option value="fr">🇫🇷 Français</option>
+    <option value="pt">🇵🇹 Português</option>
+    <option value="ar">🇦🇪 العربية</option>
+  </select>
+</div>
 </header>
 
       <div style={{ marginBottom: '20px', display: 'flex', gap: '10px', flexWrap: 'wrap', justifyContent: 'center' }}>
