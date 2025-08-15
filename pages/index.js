@@ -25,25 +25,20 @@ export default function Home({ countries }) {
   });
 
   useEffect(() => {
-    const savedLang = localStorage.getItem('lang') || 'es';
-    setLang(savedLang);
+  const savedLang = typeof localStorage !== 'undefined' ? localStorage.getItem('lang') || 'es' : 'es';
+  setLang(savedLang);
 
-    // Intenta cargar traducciones
-    fetch('/locales/translations.json')
-      .then(res => {
-        if (!res.ok) throw new Error('No se pudo cargar el archivo');
-        return res.json();
-      })
-      .then(data => {
-        if (data[savedLang]) {
-          setT(data[savedLang]);
-        }
-      })
-      .catch(err => {
-        console.warn('No se cargaron traducciones externas. Usando valores por defecto.', err);
-        // No hacemos nada: ya tenemos valores por defecto
-      });
-  }, []);
+  fetch('/locales/translations.json')
+    .then(res => res.json())
+    .then(data => {
+      if (data[savedLang]) {
+        setT(data[savedLang]);
+      }
+    })
+    .catch(err => {
+      console.warn('No se cargaron traducciones. Usando valores por defecto.', err);
+    });
+}, []);
 
   const [filter, setFilter] = useState('');
   const [type, setType] = useState('');
@@ -156,7 +151,7 @@ export default function Home({ countries }) {
 // ====> Carga solo los datos de migración
 export async function getStaticProps() {
   try {
-    const res = await fetch('https://e-migrar-site.pages.dev/data.json');
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'https://e-migrar-site.vercel.app'}/data.json`);
     const countries = await res.json();
 
     return {
