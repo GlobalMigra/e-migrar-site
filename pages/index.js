@@ -4,24 +4,43 @@ import { useState, useEffect } from 'react';
 export default function Home({ countries, }) {
   const [lang, setLang] = useState('es');
   const [translations, setTranslations] = useState(null);
-  const [t, setT] = useState(null);
+  const [t, setT] = useState({
+  title: "e-migrar",
+  tagline: "Tu guía digital para emigrar con confianza",
+  search_placeholder: "Buscar país...",
+  filter_label: "Todos los trámites",
+  route_work: "Trabajo",
+  route_study: "Estudio",
+  route_tourism: "Turismo",
+  route_marriage: "Matrimonio",
+  route_asylum: "Asilo",
+  processing_time: "Tiempo estimado",
+  cost: "Costo aproximado",
+  allows_residence: "¿Permite residencia?",
+  allows_family: "¿Puede traer familiares?",
+  requirements: "Requisitos",
+  official_link: "Ver sitio oficial",
+  alert_special: "Alerta",
+  footer: "© 2025 e-migrar.org. Información educativa. No constituye asesoría legal."
+});
   
   useEffect(() => {
-    const savedLang = localStorage.getItem('lang') || 'es';
-    setLang(savedLang);
+  const savedLang = localStorage.getItem('lang') || 'es';
 
-    fetch('/locales/translations.json')
-      .then(res => res.json())
-      .then(data => {
-        setTranslations(data);
+  // Intenta cargar traducciones
+  fetch('/locales/translations.json')
+    .then(res => res.json())
+    .then(data => {
+      if (data[savedLang]) {
         setT(data[savedLang]);
-      });
-  }, []);
-
-  if (!t) {
-    return <div style={{ textAlign: 'center', padding: '50px' }}>Cargando traducciones...</div>;
-  }
-
+      }
+    })
+    .catch(err => {
+      console.warn('No se cargaron traducciones personalizadas. Usando valores por defecto.');
+      // No hacemos nada: ya tenemos valores por defecto
+    });
+}, []);
+  
   const [filter, setFilter] = useState('');
   const [type, setType] = useState('');
 
