@@ -1,46 +1,50 @@
 // pages/index.js
 import { useState, useEffect } from 'react';
 
-export default function Home({ countries, }) {
+export default function Home({ countries }) {
   const [lang, setLang] = useState('es');
-  const [translations, setTranslations] = useState(null);
   const [t, setT] = useState({
-  title: "e-migrar",
-  tagline: "Tu guía digital para emigrar con confianza",
-  search_placeholder: "Buscar país...",
-  filter_label: "Todos los trámites",
-  route_work: "Trabajo",
-  route_study: "Estudio",
-  route_tourism: "Turismo",
-  route_marriage: "Matrimonio",
-  route_asylum: "Asilo",
-  processing_time: "Tiempo estimado",
-  cost: "Costo aproximado",
-  allows_residence: "¿Permite residencia?",
-  allows_family: "¿Puede traer familiares?",
-  requirements: "Requisitos",
-  official_link: "Ver sitio oficial",
-  alert_special: "Alerta",
-  footer: "© 2025 e-migrar.org. Información educativa. No constituye asesoría legal."
-});
-  
-  useEffect(() => {
-  const savedLang = localStorage.getItem('lang') || 'es';
+    // Valores por defecto (español)
+    title: "e-migrar",
+    tagline: "Tu guía digital para emigrar con confianza",
+    search_placeholder: "Buscar país...",
+    filter_label: "Todos los trámites",
+    route_work: "Trabajo",
+    route_study: "Estudio",
+    route_tourism: "Turismo",
+    route_marriage: "Matrimonio",
+    route_asylum: "Asilo",
+    processing_time: "Tiempo estimado",
+    cost: "Costo aproximado",
+    allows_residence: "¿Permite residencia?",
+    allows_family: "¿Puede traer familiares?",
+    requirements: "Requisitos",
+    official_link: "Ver sitio oficial",
+    alert_special: "Alerta",
+    footer: "© 2025 e-migrar.org. Información educativa. No constituye asesoría legal."
+  });
 
-  // Intenta cargar traducciones
-  fetch('/locales/translations.json')
-    .then(res => res.json())
-    .then(data => {
-      if (data[savedLang]) {
-        setT(data[savedLang]);
-      }
-    })
-    .catch(err => {
-      console.warn('No se cargaron traducciones personalizadas. Usando valores por defecto.');
-      // No hacemos nada: ya tenemos valores por defecto
-    });
-}, []);
-  
+  useEffect(() => {
+    const savedLang = localStorage.getItem('lang') || 'es';
+    setLang(savedLang);
+
+    // Intenta cargar traducciones
+    fetch('/locales/translations.json')
+      .then(res => {
+        if (!res.ok) throw new Error('No se pudo cargar el archivo');
+        return res.json();
+      })
+      .then(data => {
+        if (data[savedLang]) {
+          setT(data[savedLang]);
+        }
+      })
+      .catch(err => {
+        console.warn('No se cargaron traducciones externas. Usando valores por defecto.', err);
+        // No hacemos nada: ya tenemos valores por defecto
+      });
+  }, []);
+
   const [filter, setFilter] = useState('');
   const [type, setType] = useState('');
 
@@ -52,33 +56,34 @@ export default function Home({ countries, }) {
   return (
     <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif', maxWidth: '1000px', margin: '0 auto', backgroundColor: '#f5f5f5', minHeight: '100vh' }}>
       <header style={{ textAlign: 'center', marginBottom: '30px', backgroundColor: '#0D47A1', color: 'white', padding: '20px', borderRadius: '8px' }}>
-  <img 
-    src="/images/logo-e-migrar.png" 
-    alt="e-migrar" 
-    style={{ width: '200px', height: 'auto', marginBottom: '10px' }} 
-  />
-  <p><strong>{t.tagline}</strong></p> <div style={{ marginTop: '10px' }}>
-  <select 
-    onChange={(e) => {
-      const lang = e.target.value;
-      localStorage.setItem('lang', lang);
-      window.location.reload();
-    }}
-    defaultValue={localStorage.getItem('lang') || 'es'}
-    style={{ padding: '6px', borderRadius: '4px', border: '1px solid #ccc', fontSize: '14px' }}
-  >
-    <option value="es">🇪🇸 Español</option>
-    <option value="en">🇬🇧 English</option>
-    <option value="fr">🇫🇷 Français</option>
-    <option value="pt">🇵🇹 Português</option>
-    <option value="ar">🇦🇪 العربية</option>
-  </select>
-</div>
-</header>
+        <img 
+          src="/images/logo-e-migrar.png" 
+          alt="e-migrar" 
+          style={{ width: '200px', height: 'auto', marginBottom: '10px' }} 
+        />
+        <p><strong>{t.tagline}</strong></p>
+        <div style={{ marginTop: '10px' }}>
+          <select 
+            onChange={(e) => {
+              const lang = e.target.value;
+              localStorage.setItem('lang', lang);
+              window.location.reload();
+            }}
+            defaultValue={lang}
+            style={{ padding: '6px', borderRadius: '4px', border: '1px solid #ccc', fontSize: '14px' }}
+          >
+            <option value="es">🇪🇸 Español</option>
+            <option value="en">🇬🇧 English</option>
+            <option value="fr">🇫🇷 Français</option>
+            <option value="pt">🇵🇹 Português</option>
+            <option value="ar">🇦🇪 العربية</option>
+          </select>
+        </div>
+      </header>
 
       <div style={{ marginBottom: '20px', display: 'flex', gap: '10px', flexWrap: 'wrap', justifyContent: 'center' }}>
         <input
-          placeholder="Buscar país..."
+          placeholder={t.search_placeholder}
           value={filter}
           onChange={(e) => setFilter(e.target.value)}
           style={{ padding: '12px', minWidth: '200px', borderRadius: '6px', border: '1px solid #ccc' }}
@@ -87,12 +92,12 @@ export default function Home({ countries, }) {
           onChange={(e) => setType(e.target.value)}
           style={{ padding: '12px', borderRadius: '6px', border: '1px solid #ccc' }}
         >
-          <option value="">Todos los trámites</option>
-          <option value="Trabajo">Trabajo</option>
-          <option value="Estudio">Estudio</option>
-          <option value="Turismo">Turismo</option>
-          <option value="Matrimonio">Matrimonio</option>
-          <option value="Asilo">Asilo</option>
+          <option value="">{t.filter_label}</option>
+          <option value="Trabajo">{t.route_work}</option>
+          <option value="Estudio">{t.route_study}</option>
+          <option value="Turismo">{t.route_tourism}</option>
+          <option value="Matrimonio">{t.route_marriage}</option>
+          <option value="Asilo">{t.route_asylum}</option>
         </select>
       </div>
 
@@ -128,13 +133,13 @@ export default function Home({ countries, }) {
                   rel="noreferrer"
                   style={{ color: '#0D47A1', fontWeight: 'bold', textDecoration: 'none' }}
                 >
-                  🔗 Ver sitio oficial
+                  🔗 {t.official_link}
                 </a>
               </p>
             )}
             {c.alert_special && (
               <p style={{ color: 'orange', fontWeight: 'bold', marginTop: '10px', backgroundColor: '#fff3cd', padding: '10px', borderRadius: '4px' }}>
-                ⚠️ {c.alert_special}
+                ⚠️ {t.alert_special}: {c.alert_special}
               </p>
             )}
           </div>
@@ -142,58 +147,29 @@ export default function Home({ countries, }) {
       )}
 
       <footer style={{ textAlign: 'center', marginTop: '50px', color: '#777', fontSize: '0.9em', borderTop: '1px solid #eee', paddingTop: '20px' }}>
-        <p>© 2025 e-migrar.org. Información educativa. No constituye asesoría legal.</p>
+        <p>{t.footer}</p>
       </footer>
     </div>
   );
 }
 
-// ====> Carga los datos desde /data.json
+// ====> Carga solo los datos de migración
 export async function getStaticProps() {
   try {
-    // ====> 1. Carga los datos de migración
-    const res = await fetch('/data.json');
+    const res = await fetch('https://e-migrar-site.pages.dev/data.json');
     const countries = await res.json();
-
-    // ====> 2. Carga las traducciones
-    const resTranslations = await fetch('/locales/translations.json');
-    const translations = await resTranslations.json();
-
-    // ====> 3. Define el idioma predeterminado (español)
-    const t = translations['es']; // Puedes cambiar a 'en', 'fr', etc.
 
     return {
       props: {
         countries,
-        translations, // Opcional: si quieres cambiar de idioma en el cliente
-        t,            // Etiqueta corta para usar en el componente
       },
       revalidate: 3600,
     };
   } catch (error) {
-    console.error('Error al cargar datos o traducciones:', error);
+    console.error('Error al cargar data.json:', error);
     return {
       props: {
         countries: [],
-        t: {
-          title: "e-migrar",
-          tagline: "Tu guía digital para emigrar con confianza",
-          search_placeholder: "Buscar país...",
-          filter_label: "Todos los trámites",
-          route_work: "Trabajo",
-          route_study: "Estudio",
-          route_tourism: "Turismo",
-          route_marriage: "Matrimonio",
-          route_asylum: "Asilo",
-          processing_time: "Tiempo estimado",
-          cost: "Costo aproximado",
-          allows_residence: "¿Permite residencia?",
-          allows_family: "¿Puede traer familiares?",
-          requirements: "Requisitos",
-          official_link: "Ver sitio oficial",
-          alert_special: "Alerta",
-          footer: "© 2025 e-migrar.org. Información educativa. No constituye asesoría legal."
-        }
       },
     };
   }
