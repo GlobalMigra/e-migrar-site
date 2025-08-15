@@ -4,28 +4,28 @@ import { useState, useEffect } from 'react';
 export default function Home({ countries }) {
   const [lang, setLang] = useState('es');
   const [t, setT] = useState({
-    // Valores por defecto (español)
-    title: "e-migrar",
-    tagline: "Tu guía digital para emigrar con confianza",
-    search_placeholder: "Buscar país...",
-    filter_label: "Todos los trámites",
-    route_work: "Trabajo",
-    route_study: "Estudio",
-    route_tourism: "Turismo",
-    route_marriage: "Matrimonio",
-    route_asylum: "Asilo",
-    processing_time: "Tiempo estimado",
-    cost: "Costo aproximado",
-    allows_residence: "¿Permite residencia?",
-    allows_family: "¿Puede traer familiares?",
-    requirements: "Requisitos",
-    official_link: "Ver sitio oficial",
-    alert_special: "Alerta",
-    footer: "© 2025 e-migrar.org. Información educativa. No constituye asesoría legal."
-  });
+  title: "e-migrar",
+  tagline: "Tu guía digital para emigrar con confianza",
+  search_placeholder: "Buscar país...",
+  filter_label: "Todos los trámites",
+  route_work: "Trabajo",
+  route_study: "Estudio",
+  route_tourism: "Turismo",
+  route_marriage: "Matrimonio",
+  route_asylum: "Asilo",
+  processing_time: "Tiempo estimado",
+  cost: "Costo aproximado",
+  allows_residence: "¿Permite residencia?",
+  allows_family: "¿Puede traer familiares?",
+  requirements: "Requisitos",
+  official_link: "Ver sitio oficial",
+  alert_special: "Alerta",
+  footer: "© 2025 e-migrar.org. Información educativa. No constituye asesoría legal."
+});
 
   useEffect(() => {
-  const savedLang = typeof localStorage !== 'undefined' ? localStorage.getItem('lang') || 'es' : 'es';
+  // Solo se ejecuta en el navegador
+  const savedLang = localStorage.getItem('lang') || 'es';
   setLang(savedLang);
 
   fetch('/locales/translations.json')
@@ -38,7 +38,7 @@ export default function Home({ countries }) {
     .catch(err => {
       console.warn('No se cargaron traducciones. Usando valores por defecto.', err);
     });
-}, []);
+}, []); // Se ejecuta solo en el cliente
 
   const [filter, setFilter] = useState('');
   const [type, setType] = useState('');
@@ -151,8 +151,8 @@ export default function Home({ countries }) {
 // ====> Carga solo los datos de migración
 export async function getStaticProps() {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'https://e-migrar-site.vercel.app'}/data.json`);
-    const countries = await res.json();
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://e-migrar-site.vercel.app';
+const res = await fetch(`${baseUrl}/data.json`);
 
     return {
       props: {
