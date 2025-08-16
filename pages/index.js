@@ -66,11 +66,12 @@ export default function Home({ countries }) {
         <div style={{ marginTop: '10px' }}>
           <select 
             onChange={(e) => {
-              const lang = e.target.value;
-              localStorage.setItem('lang', lang);
-              window.location.reload();
-            }}
-            defaultValue={lang}
+  const lang = e.target.value;
+  localStorage.setItem('lang', lang);
+  // Fuerza una recarga limpia para aplicar el idioma
+  window.location.href = window.location.pathname;
+}}
+defaultValue={lang}
             style={{ padding: '6px', borderRadius: '4px', border: '1px solid #ccc', fontSize: '14px' }}
           >
             <option value="es">🇪🇸 Español</option>
