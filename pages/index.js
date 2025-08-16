@@ -3,50 +3,51 @@ import { useState, useEffect } from 'react';
 
 export default function Home({ countries }) {
   const [lang, setLang] = useState('es');
- const [t, setT] = useState({
-  title: "e-migrar",
-  tagline: "Tu guía digital para emigrar con confianza",
-  search_placeholder: "Buscar país...",
-  filter_label: "Todos los trámites",
-  route_work: "Trabajo",
-  route_study: "Estudio",
-  route_tourism: "Turismo",
-  route_marriage: "Matrimonio",
-  route_asylum: "Asilo",
-  processing_time: "Tiempo estimado",
-  cost: "Costo aproximado",
-  allows_residence: "¿Permite residencia?",
-  allows_family: "¿Puede traer familiares?",
-  requirements: "Requisitos",
-  official_link: "Ver sitio oficial",
-  alert_special: "Alerta",
-  footer: "© 2025 e-migrar.org. Información educativa. No constituye asesoría legal."
-});
+  const [t, setT] = useState({
+    title: "e-migrar",
+    tagline: "Tu guía digital para emigrar con confianza",
+    search_placeholder: "Buscar país...",
+    filter_label: "Todos los trámites",
+    route_work: "Trabajo",
+    route_study: "Estudio",
+    route_tourism: "Turismo",
+    route_marriage: "Matrimonio",
+    route_asylum: "Asilo",
+    processing_time: "Tiempo estimado",
+    cost: "Costo aproximado",
+    allows_residence: "¿Permite residencia?",
+    allows_family: "¿Puede traer familiares?",
+    requirements: "Requisitos",
+    official_link: "Ver sitio oficial",
+    alert_special: "Alerta",
+    footer: "© 2025 e-migrar.org. Información educativa. No constituye asesoría legal."
+  });
+
+  const [filter, setFilter] = useState('');
+  const [type, setType] = useState('');
 
   // Solo se ejecuta en el navegador
   useEffect(() => {
-  const savedLang = typeof window !== 'undefined' && localStorage.getItem('lang') ? localStorage.getItem('lang') : 'es';
-  setLang(savedLang);
+    const savedLang = typeof window !== 'undefined' && localStorage.getItem('lang') ? localStorage.getItem('lang') : 'es';
+    setLang(savedLang);
 
-  fetch('/locales/translations.json')
-  .then(res => {
-    console.log('Respuesta del fetch:', res);
-    if (!res.ok) throw new Error('No se pudo cargar el archivo');
-    return res.json();
-  })
-  .then(data => {
-    console.log('Datos cargados:', data);
-    if (data[savedLang]) {
-      console.log('Idioma cargado:', savedLang, data[savedLang]);
-      setT(data[savedLang]);
-    }
-  })
-  .catch(err => {
-    console.error('Error al cargar traducciones:', err);
-  });
-    
-  const [filter, setFilter] = useState('');
-  const [type, setType] = useState('');
+    fetch('/locales/translations.json')
+      .then(res => {
+        console.log('Respuesta del fetch:', res);
+        if (!res.ok) throw new Error('No se pudo cargar el archivo');
+        return res.json();
+      })
+      .then(data => {
+        console.log('Datos cargados:', data);
+        if (data[savedLang]) {
+          console.log('Idioma cargado:', savedLang, data[savedLang]);
+          setT(data[savedLang]);
+        }
+      })
+      .catch(err => {
+        console.error('Error al cargar traducciones:', err);
+      });
+  }, []);
 
   const filtered = countries.filter((c) =>
     c.country.toLowerCase().includes(filter.toLowerCase()) &&
@@ -157,8 +158,8 @@ export default function Home({ countries }) {
 export async function getStaticProps() {
   try {
     // Define baseUrl una sola vez, sin espacios
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://e-migrar-site.vercel.app';
-    const res = await fetch(`${baseUrl}/data.json`); // Usa baseUrl, no process.env
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://e-migrar-site.vercel.app'; // ✅ Sin espacios
+    const res = await fetch(`${baseUrl}/data.json`); // Usa baseUrl
     const countries = await res.json();
 
     return {
