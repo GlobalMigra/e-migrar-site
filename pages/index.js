@@ -29,17 +29,21 @@ export default function Home({ countries }) {
   setLang(savedLang);
 
   fetch('/locales/translations.json')
-    .then(res => res.json())
-    .then(data => {
-      if (data[savedLang]) {
-        setT(data[savedLang]);
-      }
-    })
-    .catch(err => {
-      console.warn('No se cargaron traducciones. Usando valores por defecto.', err);
-    });
-}, []);
-
+  .then(res => {
+    console.log('Respuesta del fetch:', res);
+    if (!res.ok) throw new Error('No se pudo cargar el archivo');
+    return res.json();
+  })
+  .then(data => {
+    console.log('Datos cargados:', data);
+    if (data[savedLang]) {
+      console.log('Idioma cargado:', savedLang, data[savedLang]);
+      setT(data[savedLang]);
+    }
+  })
+  .catch(err => {
+    console.error('Error al cargar traducciones:', err);
+  });
   const [filter, setFilter] = useState('');
   const [type, setType] = useState('');
 
