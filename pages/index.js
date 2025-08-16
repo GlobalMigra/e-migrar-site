@@ -151,9 +151,9 @@ export default function Home({ countries }) {
 // ====> Carga los datos desde /data.json
 export async function getStaticProps() {
   try {
-    // Usa una URL absoluta para evitar errores en el build
+    // Define baseUrl una sola vez, sin espacios
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://e-migrar-site.vercel.app';
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/data.json`);
+    const res = await fetch(`${baseUrl}/data.json`); // Usa baseUrl, no process.env
     const countries = await res.json();
 
     return {
