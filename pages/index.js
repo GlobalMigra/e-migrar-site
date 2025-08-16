@@ -58,10 +58,10 @@ export default function Home({ countries }) {
     <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif', maxWidth: '1000px', margin: '0 auto', backgroundColor: '#f5f5f5', minHeight: '100vh' }}>
       <header style={{ textAlign: 'center', marginBottom: '30px', backgroundColor: '#0D47A1', color: 'white', padding: '20px', borderRadius: '8px' }}>
         <img 
-          src="/images/logo-e-migrar.png" 
-          alt="e-migrar" 
-          style={{ width: '200px', height: 'auto', marginBottom: '10px' }} 
-        />
+  src="https://via.placeholder.com/200x60/0D47A1/FFFFFF?text=e-migrar" 
+  alt="e-migrar" 
+  style={{ width: '200px', height: 'auto', marginBottom: '10px' }} 
+/>
         <p><strong>{t.tagline}</strong></p>
         <div style={{ marginTop: '10px' }}>
           <select 
