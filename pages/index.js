@@ -44,6 +44,7 @@ export default function Home({ countries }) {
   .catch(err => {
     console.error('Error al cargar traducciones:', err);
   });
+    
   const [filter, setFilter] = useState('');
   const [type, setType] = useState('');
 
